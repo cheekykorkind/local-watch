@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    container_name: 'db'
+    image: postgres:11.4
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    restart: on-failure
+    volumes:
+      - ../../../tmp/db:/var/lib/postgresql/data
+  web:
+    container_name: 'web'
+    user: $UID:$GID
+    build:
+      context: ../../../
+      dockerfile: ./server/docker/development/Dockerfile
+      args:
+        UID: $UID
+        GID: $GID
+        UNAME: $UNAME
+    stdin_open: true
+    tty: true
+    working_dir: '/home/$UNAME/myapp'
+    volumes:
+      - ../../../:/home/$UNAME/myapp
+      - ./database.yml:/home/$UNAME/myapp/config/database.yml:cached
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
