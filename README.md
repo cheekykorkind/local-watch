@@ -28,3 +28,4 @@
 ### build binary(cross-compile, CentOS)
 - `go build -a -ldflags "-linkmode external -extldflags '-static' -s -w" linux_memory.go`
 - `cd ./go-client/workspace && ./linux_memory`
+- `cd /home/jiho/private_work/local-watch/server/docker/development/ && sh docker-compose-test.sh`

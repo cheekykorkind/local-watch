@@ -27,10 +27,12 @@ func main() {
 	}
 	defer file.Close()
 
+	var port uint64
+	port = 4000
 	var memory MemInfo
 	memStats := map[string]*uint64{
-		"MemTotal":     &memory.MemTotal,
-		"MemAvailable":      &memory.MemAvailable,
+		"MemTotal":			&memory.MemTotal,
+		"MemAvailable":		&memory.MemAvailable,
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -51,8 +53,13 @@ func main() {
 		}
 	}
 	
+	fmt.Println("===========================")
+	fmt.Println("open port : ", port)
+	fmt.Println("Stop Command : kill -9 ", os.Getpid())
+	fmt.Println("===========================")
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, changePersent(memStats))
 	})
-	http.ListenAndServe(":4000", nil)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)	
 }
