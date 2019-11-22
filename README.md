@@ -2,7 +2,7 @@
 [日本語](README.jp.md)
 # local watch
 
-# command sequence
+# set up command sequence
 - `cd server/docker/development/`
 
 - If you do not set .env file, execute.
@@ -20,3 +20,11 @@
   - remove `byebug` in your code
   - at console input and enter : `exit`
   - at console press : `Ctrl+P` and `Ctrl+Q`
+
+## go client
+- `docker exec -it go-client /bin/sh`
+- `go run linux_memory.go`
+
+### build binary(cross-compile, CentOS)
+- `go build -a -ldflags "-linkmode external -extldflags '-static' -s -w" linux_memory.go`
+- `cd ./go-client/workspace && ./linux_memory`

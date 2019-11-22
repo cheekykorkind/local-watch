@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	// "io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -12,7 +12,6 @@ import (
 type MemInfo struct {
 	MemTotal, MemAvailable uint64
 }
-
 
 func changePersent(memStats map[string]*uint64) string {
 	memTotal := float64(*memStats["MemTotal"])
@@ -35,14 +34,12 @@ func main() {
 	}
 
 	scanner := bufio.NewScanner(file)
-
 	for scanner.Scan() {
 		line := scanner.Text()
 
 		i := strings.IndexRune(line, ':')
 
 		fieldName := line[:i]
-		
 		pointer := memStats[fieldName]
 		if pointer == nil {
 			continue
@@ -54,5 +51,8 @@ func main() {
 		}
 	}
 	
-	fmt.Println(changePersent(memStats))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, changePersent(memStats))
+	})
+	http.ListenAndServe(":4000", nil)
 }
