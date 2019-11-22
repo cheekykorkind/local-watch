@@ -1,6 +1,7 @@
 FROM golang:1.13.3-alpine
 
-RUN apk add sudo
+# for cross-compile : musl-dev util-linux-dev gcc
+RUN apk --update add sudo musl-dev util-linux-dev gcc
 
 ARG UID
 ARG GID
