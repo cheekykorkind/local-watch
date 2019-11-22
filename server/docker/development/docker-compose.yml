@@ -30,3 +30,17 @@ services:
       - "3000:3000"
     depends_on:
       - db
+  go-client:
+    container_name: 'go-client'
+    user: $UID:$GID
+    build:
+      context: ./go-client/
+      dockerfile: ./Dockerfile
+      args:
+        UID: $UID
+        GID: $GID
+        UNAME: $UNAME
+    tty: true
+    working_dir: '/home/$UNAME/workspace'
+    volumes:
+      - ./go-client/workspace:/home/$UNAME/workspace
